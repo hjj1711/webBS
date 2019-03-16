@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/semantic.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/semantic.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/echarts.min.js') }}"></script>
+
+</head>
+<body>
+<form action="/plotly" method="post">
+
+    <!--主体部分-->
+    <div class="ui container segment">
+        <div class="ui divided items">
+
+            <div class="item">
+                <div class="content">
+                    <div class="header">
+                        A股指数K线图
+                    </div>
+                    <div class="description">
+                        <p>
+                            Say something
+                        <div id="main" class="ui container" style="width: 1000px;height:600px;"></div>
+                        </p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui label">
+                            tag1
+                        </div>
+                        <div class="ui label">
+                            tag2
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--主体部分结束 -->
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+
+      <!---->
+      //获取后端传来的json
+      var t={{ data|safe }}
+      var trace = {
+          //对后端传来的json进行分组形成新的数组
+          x: t.map(val=>val.times),
+          close: t.map(val=>val.CP),
+          high: t.map(val=>val.HP),
+          low: t.map(val=>val.LP),
+          open: t.map(val=>val.OP),
+
+          // cutomise colors
+          increasing: {line: {color: 'red'}},
+          decreasing: {line: {color: 'green'}},
+
+          type: 'candlestick',
+          xaxis: 'x',
+          yaxis: 'y'
+      };
+
+      var datas = [trace];
+      console.log(datas)
+      var layout = {
+        dragmode: 'zoom',
+        showlegend: false,
+        xaxis: {
+          autorange: true,
+          title: 'A股指数',
+           rangeselector: {
+              x: 0,
+              y: 1.2,
+              xanchor: 'left',
+              font: {size:10},
+              buttons: [{
+                  step: 'month',
+                  stepmode: 'backward',
+                  count: 1,
+                  label: '1 month'
+              }, {
+                  step: 'month',
+                  stepmode: 'backward',
+                  count: 6,
+                  label: '6 months'
+              }, {
+                  step: 'all',
+                  label: 'All dates'
+              }]
+            }
+        },
+        yaxis: {
+          autorange: true,
+        }
+      };
+      Plotly.plot('main', datas, layout);
+    </script>
+</form>
+</body>
+
+</html>

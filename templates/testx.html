@@ -1,0 +1,103 @@
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/semantic.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/semantic.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/echarts.min.js') }}"></script>
+
+</head>
+<body>
+<form action="/testx" method="post">
+ <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main" style="width:1200px;height:800px;"></div>
+        <div id="graph" style="height: 400px"></div>
+        <!--引用plotly.js-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        /*var t2='[{"name":"zhangsan","age":"24"},{"name":"lisi","age":"30"},{"name":"wangwu","age":"16"},{"name":"tianqi","age":"7"}] ';
+        var myobj=eval(t2);
+        for(var i=0;i<myobj.length;i++){
+            alert(myobj[i].name);
+            alert(myobj[i].age);
+        }*/
+      <!---->
+      var tx=[{"CP": 2987.03, "HP": 2989.89, "LP": 2942.3, "OP": 2958.33, "RF": 1.59, "TV": 145227024170.0, "UD": 46.79, "query": null, "query_class": null, "times": "2011-01-04", "turnover": 109505243.0}, {"CP": 2972.22, "HP": 2984.71, "LP": 2957.25, "OP": 2966.49, "RF": -0.5, "TV": 134863488371.0, "UD": -14.81, "query": null, "query_class": null, "times": "2011-01-05", "turnover": 103750991.0}] ;
+      var ntx=tx.map(val=>va.CP)
+      var t={{ data|safe }}
+      //var arrJson = [{'name':78},{'name':'lily'},{'name':'xiaoyue'},{'name':'krry'}];
+      //var newArrJson = arrJson.map( val => val.name);
+      //console.log(newArrJson);
+
+      //var data = eval(t)
+        //document.write(data)
+        //for(var i=0;i<data.length;i++) {
+        //for(var i in data) {
+            //document.write(data[i].times);
+            //document.write(data[i].CP);
+            //}
+            //json数组类型字符串取值
+            //console.log(data)
+            //console.log(data[i].times)
+            //var x=[data[i].times]
+            //console.log(x)
+            //document.write(obj[i].name)
+            var trace = {
+                x: t.map(val=>val.times),
+                close: t.map(val=>val.CP),
+                high: t.map(val=>val.HP),
+                low: t.map(val=>val.LP),
+                open: t.map(val=>val.OP),
+
+                // cutomise colors
+                increasing: {line: {color: 'red'}},
+                decreasing: {line: {color: 'green'}},
+
+                type: 'candlestick',
+                xaxis: 'x',
+                yaxis: 'y'
+            };
+
+        //}
+      //console.log(trace)
+      var datas = [trace];
+      console.log(datas)
+      var layout = {
+        dragmode: 'zoom',
+        showlegend: false,
+        xaxis: {
+          autorange: true,
+          title: 'A股指数',
+           rangeselector: {
+              x: 0,
+              y: 1.2,
+              xanchor: 'left',
+              font: {size:10},
+              buttons: [{
+                  step: 'month',
+                  stepmode: 'backward',
+                  count: 1,
+                  label: '1 month'
+              }, {
+                  step: 'month',
+                  stepmode: 'backward',
+                  count: 6,
+                  label: '6 months'
+              }, {
+                  step: 'all',
+                  label: 'All dates'
+              }]
+            }
+        },
+        yaxis: {
+          autorange: true,
+        }
+      };
+
+      Plotly.plot('main', datas, layout);
+    </script>
+
+</form>
+</body>
+</html>
