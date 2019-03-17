@@ -45,9 +45,6 @@ def test2():
 
     return json.dumps(ql, cls=AlchemyEncoder, check_circular=False)
 
-
-
-
 #对时间与数字的数据格式进行转换，方便python的json序列化
 class AlchemyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -73,8 +70,8 @@ class AlchemyEncoder(json.JSONEncoder):
             # a json-encodable dict
             return fields
 
-@app.route('/plotly', methods=['GET', 'POST'])
-def plotly():
+@app.route('/pl', methods=['GET', 'POST'])
+def pl():
     qoutes = Qoutes.query.all()
     ql = []
     for q in qoutes:
@@ -107,14 +104,16 @@ class AlchemyEncoder(json.JSONEncoder):
             # a json-encodable dict
             return fields
 
-@app.route('/testx', methods=['GET', 'POST'])
-def testx():
+@app.route('/ec', methods=['GET', 'POST'])
+def ec():
     qoutes = Qoutes.query.all()
     ql = []
     for q in qoutes:
         ql.append(q)
-    return render_template('testx.html',data=json.dumps(ql, cls=AlchemyEncoder, check_circular=False))
-#对时间与数字的数据格式进行转换，方便python的json序列化
+    return render_template('echartx.html', data=json.dumps(ql, cls=AlchemyEncoder, check_circular=False))
+
+
+# 对时间与数字的数据格式进行转换，方便python的json序列化
 class AlchemyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj.__class__, DeclarativeMeta):
@@ -123,9 +122,9 @@ class AlchemyEncoder(json.JSONEncoder):
             for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
                 data = obj.__getattribute__(field)
                 try:
-                    json.dumps(data)     # this will fail on non-encodable values, like other classes
+                    json.dumps(data)  # this will fail on non-encodable values, like other classes
                     fields[field] = data
-                except TypeError:    # 添加了对datetime的处理
+                except TypeError:  # 添加了对datetime的处理
                     if isinstance(data, datetime.datetime):
                         fields[field] = data.isoformat()
                     elif isinstance(data, datetime.date):
