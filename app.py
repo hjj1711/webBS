@@ -26,24 +26,15 @@ def test():
     #return render_template('index.html',qoutes=jsonify(q))
     return render_template('index.html',qoutes=qoutes,times=times,op=op,cp=cp,lp=lp,hp=hp)
 
-@app.route('/test2', methods=['GET', 'POST'])
-def test2():
+@app.route('/testx', methods=['GET', 'POST'])
+def testx():
     #if request.method == "GET":
     qoutes = Qoutes.query.all()
-    #q=qoutes.to_dict()
-    # for q in qoutes:
-    #     app.logger.debug(q.times)
-    #     times=q.times#日期
-    #     op=q.OP#开盘价
-    #     cp = q.CP # 收盘价
-    #     lp = q.LP  # 最低价
-    #     hp=q.HP#最高价
     ql=[]
     for q in qoutes:
         ql.append(q)
 
-
-    return json.dumps(ql, cls=AlchemyEncoder, check_circular=False)
+    return render_template('testx.html', data=json.dumps(ql, cls=AlchemyEncoder, check_circular=False))
 
 
 
